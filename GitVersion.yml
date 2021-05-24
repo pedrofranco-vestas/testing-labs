@@ -1,0 +1,24 @@
+assembly-versioning-scheme: MajorMinorPatch
+mode: Mainline
+next-version: 1.49.0
+tag-prefix: '[vV]'
+branches:
+  feature: 
+    tag: 'alpha'
+    increment: patch
+  bugfix: 
+    regex: ^bugfix
+    source-branches: [ master ]
+    tag: 'alpha'
+    increment: patch
+  hotfix: 
+    regex: ^hotfix
+    source-branches: [ master ]
+    tag: 'alpha'
+    increment: patch
+  master:
+    tag: ''
+    increment: minor
+ignore:
+  sha: []
+merge-message-formats: {}
