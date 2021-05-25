@@ -32,11 +32,20 @@ jobs:
 
     - name: Show determined version
       run: |
-        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
-        echo "SemVer: $GITVERSION_SEMVER"
+        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.MajorMinorPatch }}"
+        echo "SemVer: ${{ steps.gitversion.outputs.SemVer }}"
     
     - name: Build
       run: dotnet build --no-restore
     
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+    - name: Package Model
+      run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o . /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
+
+    - name: Add nuget source
+      run: dotnet nuget add source --username vestas-power-solutions --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/vestas-power-solutions/index.json"
+
+    - name: Publish Package
+      run: dotnet nuget push "./*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
