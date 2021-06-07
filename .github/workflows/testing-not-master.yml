@@ -1,4 +1,4 @@
-name: testing
+name: testing-not-master
 
 on:
   push:
