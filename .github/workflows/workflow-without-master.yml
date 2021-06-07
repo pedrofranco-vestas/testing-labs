@@ -1,4 +1,4 @@
-name: testing-not-master
+name: workflow-without-master
 
 on:
   push:
