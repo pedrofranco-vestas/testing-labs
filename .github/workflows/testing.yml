@@ -1,14 +1,9 @@
 name: testing
 
-on:
+on: 
   push:
-    branches: 
-      - '!master'
-  pull_request:
-    branches: 
-      - '!master'
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches-ignore:
+      - 'main'
   workflow_dispatch:
 
 jobs:

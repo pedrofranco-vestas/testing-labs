@@ -3,10 +3,11 @@ name: workflow-without-master
 on:
   push:
     branches: 
-      - '!master'
+      - 'main'
   pull_request:
-    branches: 
-      - '!master'
+    branches-ignore: 
+      - 'main'
+  workflow_dispatch:
 
 
 jobs:
