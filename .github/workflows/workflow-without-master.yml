@@ -1,0 +1,59 @@
+name: workflow-without-master
+
+on:
+  push:
+    branches: 
+      - 'main'
+  pull_request:
+    branches-ignore: 
+      - 'main'
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.9
+      with:
+        versionSpec: '5.x'
+
+    - name: Determine version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.9.9
+      with: 
+        useConfigFile: true
+
+    - name: Show determined version
+      run: |
+        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.MajorMinorPatch }}"
+        echo "SemVer: ${{ steps.gitversion.outputs.SemVer }}"
+    
+    - name: Build
+      run: dotnet build --no-restore -c Release /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
+    
+    - name: Test
+      run: dotnet test --no-build -c Release --verbosity normal
+
+    - name: Package Model
+      run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o . /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
+
+    - name: Add nuget source
+      run: dotnet nuget add source --username vestas-power-solutions --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/vestas-power-solutions/index.json"
+
+    - name: Publish Package
+      run: dotnet nuget push "./*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
