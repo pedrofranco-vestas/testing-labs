@@ -8,15 +8,15 @@ branches:
     increment: patch
   bugfix: 
     regex: ^bugfix
-    source-branches: [ master ]
+    source-branches: [ main ]
     tag: 'alpha'
     increment: patch
   hotfix: 
     regex: ^hotfix
-    source-branches: [ master ]
+    source-branches: [ main ]
     tag: 'alpha'
     increment: patch
-  master:
+  main:
     tag: ''
     increment: minor
 ignore:
