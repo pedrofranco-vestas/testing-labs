@@ -45,6 +45,12 @@ jobs:
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
 
+    - name: Tag commit
+      run: git tag ${{ steps.gitversion.outputs.SemVer }}
+
+    - name: Push tag
+      run: git push origin --tags
+
     - name: Package Model
       run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o . /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
 

@@ -49,11 +49,34 @@ jobs:
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
 
+    - name: Tag commit
+      run: git tag ${{ steps.gitversion.outputs.SemVer }}
+
+    - name: Push tag
+      run: git push origin --tags
+
     - name: Package Model
       run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o . /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
 
-    - name: Add nuget source
-      run: dotnet nuget add source --username vestas-power-solutions --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/vestas-power-solutions/index.json"
+    # - name: Add nuget source
+    #   run: dotnet nuget add source --username vestas-power-solutions --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/vestas-power-solutions/index.json"
 
-    - name: Publish Package
-      run: dotnet nuget push "./*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+    # - name: Publish Package
+    #   run: dotnet nuget push "./*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+
+    - name: Build artifacts
+      run: dotnet publish ./HelloWorld -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/ -r win-x64
+
+    - name: Pack artifacts
+      uses: papeloto/action-zip@v1
+      with:
+        dest: hello-world-win-x64.zip
+        files: publish/
+
+    - name: Publish release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: hello-world-win-x64.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
