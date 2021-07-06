@@ -105,14 +105,13 @@ jobs:
 
     - name: Show determined version
       run: |
-        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.MajorMinorPatch }}"
         echo "SemVer: ${{ steps.gitversion.outputs.SemVer }}"
         git describe --tags
     
     - name: Retrieve artifacts
       uses: actions/download-artifact@v2
       with:
-        name: hello-world-v$helloWorldVersion
+        name: hello-world-v${{ env.helloWorldVersion }}
       env:
         helloWorldVersion: git describe --tags
 
