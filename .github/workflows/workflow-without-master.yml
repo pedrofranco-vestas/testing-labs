@@ -112,7 +112,9 @@ jobs:
     - name: Retrieve artifacts
       uses: actions/download-artifact@v2
       with:
-        name: hello-world-v${{ git describe --tags }}
+        name: hello-world-v$helloWorldVersion
+      env:
+        helloWorldVersion: git describe --tags
 
     # - name: Publish release
     #   uses: softprops/action-gh-release@v1
