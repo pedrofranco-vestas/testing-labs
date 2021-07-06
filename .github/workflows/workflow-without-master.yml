@@ -85,3 +85,44 @@ jobs:
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.9
+      with:
+        versionSpec: '5.x'
+
+    - name: Determine version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.9.9
+      with: 
+        useConfigFile: true
+
+    - name: Show determined version
+      run: |
+        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.MajorMinorPatch }}"
+        echo "SemVer: ${{ steps.gitversion.outputs.SemVer }}"
+    
+    # - name: Retrieve artifacts
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: hello-world-v${{ steps.gitversion.outputs.SemVer }}
+    #     path: ./*.zip
+
+    # - name: Publish release
+    #   uses: softprops/action-gh-release@v1
+    #   with:
+    #     files: hello-world-win-x64.zip
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
