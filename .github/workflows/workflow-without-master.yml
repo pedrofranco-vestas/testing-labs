@@ -107,13 +107,14 @@ jobs:
       run: |
         echo "SemVer: ${{ steps.gitversion.outputs.SemVer }}"
         git describe --tags
+        echo "helloWorldVersion<<EOF" >> $GITHUB_ENV
+        git describe --tags >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     
     - name: Retrieve artifacts
       uses: actions/download-artifact@v2
       with:
         name: hello-world-v${{ env.helloWorldVersion }}
-      env:
-        helloWorldVersion: git describe --tags
 
     # - name: Publish release
     #   uses: softprops/action-gh-release@v1
