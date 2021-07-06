@@ -114,6 +114,7 @@ jobs:
       run: |
         echo "MajorMinorPatch: ${{ steps.gitversion.outputs.MajorMinorPatch }}"
         echo "SemVer: ${{ steps.gitversion.outputs.SemVer }}"
+        git describe --tags
     
     # - name: Retrieve artifacts
     #   uses: actions/upload-artifact@v2
