@@ -119,7 +119,7 @@ jobs:
     - name: Publish release
       uses: softprops/action-gh-release@v1
       with:
-        files: hello-world-${{ env.helloWorldVersion }}
+        files: hello-world-win-x64-${{ env.helloWorldVersion }}.zip
         tag_name: ${{ env.helloWorldVersion }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
