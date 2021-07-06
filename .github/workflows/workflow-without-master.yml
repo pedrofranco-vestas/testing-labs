@@ -51,8 +51,8 @@ jobs:
 
     - name: Tag & push commit
       run: |
-        git tag ${{ steps.gitversion.outputs.SemVer }}
-        git push origin --tags
+        git tag -a ${{ steps.gitversion.outputs.SemVer }} -m "CI/CD new release version"
+        git push origin ${{ steps.gitversion.outputs.SemVer }}
 
     - name: Package Model
       run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o . /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
@@ -116,9 +116,9 @@ jobs:
       with:
         name: hello-world-v${{ env.helloWorldVersion }}
 
-    # - name: Publish release
-    #   uses: softprops/action-gh-release@v1
-    #   with:
-    #     files: hello-world-win-x64.zip
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Publish release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: hello-world-v${{ env.helloWorldVersion }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
