@@ -51,7 +51,7 @@ jobs:
 
     - name: Tag & push commit
       run: |
-        git tag -a ${{ steps.gitversion.outputs.SemVer }} -m "CI/CD new release version"
+        git tag ${{ steps.gitversion.outputs.SemVer }}
         git push origin ${{ steps.gitversion.outputs.SemVer }}
 
     - name: Package Model
