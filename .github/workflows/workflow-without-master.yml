@@ -49,11 +49,10 @@ jobs:
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
 
-    - name: Tag commit
-      run: git tag ${{ steps.gitversion.outputs.SemVer }}
-
-    - name: Push tag
-      run: git push origin --tags
+    - name: Tag & push commit
+      run: |
+        git tag ${{ steps.gitversion.outputs.SemVer }}
+        git push origin --tags
 
     - name: Package Model
       run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o . /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
@@ -70,13 +69,19 @@ jobs:
     - name: Pack artifacts
       uses: papeloto/action-zip@v1
       with:
-        dest: hello-world-win-x64.zip
+        dest: hello-world-win-x64-v${{ steps.gitversion.outputs.SemVer }}.zip
         files: publish/
-
-    - name: Publish release
-      uses: softprops/action-gh-release@v1
+    
+    - name: Store artifacts
+      uses: actions/upload-artifact@v2
       with:
-        files: hello-world-win-x64.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: hello-world-v${{ steps.gitversion.outputs.SemVer }}
+        path: ./*.zip
+
+    # - name: Publish release
+    #   uses: softprops/action-gh-release@v1
+    #   with:
+    #     files: hello-world-win-x64.zip
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
