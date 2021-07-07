@@ -40,7 +40,7 @@ jobs:
         echo "SemVer: ${{ steps.gitversion.outputs.SemVer }}"
     
     - name: Build
-      run: dotnet build --no-restore -c Release /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
+      run: dotnet build --no-restore -c Release /p:Version=${{ steps.gitversion.outputs.SemVer }}
     
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal

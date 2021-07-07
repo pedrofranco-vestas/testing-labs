@@ -44,7 +44,7 @@ jobs:
         echo "SemVer: ${{ steps.gitversion.outputs.SemVer }}"
     
     - name: Build
-      run: dotnet build --no-restore -c Release /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
+      run: dotnet build --no-restore -c Release -p:Version=${{ steps.gitversion.outputs.SemVer }}
     
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
@@ -55,7 +55,7 @@ jobs:
         git push origin v${{ steps.gitversion.outputs.SemVer }}
 
     - name: Package Model
-      run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o . /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
+      run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o . -p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
 
     # - name: Add nuget source
     #   run: dotnet nuget add source --username vestas-power-solutions --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/vestas-power-solutions/index.json"
@@ -116,10 +116,13 @@ jobs:
       with:
         name: hello-world-${{ env.helloWorldVersion }}
 
+    - name: List folder
+      run: ls
+
     - name: Publish release
       uses: softprops/action-gh-release@v1
       with:
-        files: hello-world-win-x64-${{ env.helloWorldVersion }}.zip
+        files: *.zip
         tag_name: ${{ env.helloWorldVersion }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
