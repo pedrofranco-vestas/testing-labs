@@ -61,11 +61,19 @@ jobs:
         dest: hello-world-win-x64-v${{ steps.gitversion.outputs.SemVer }}.zip
         files: publish/
     
-    # - name: Store artifacts
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: hello-world-v${{ steps.gitversion.outputs.SemVer }}
-    #     path: ./*.zip
+    - name: Store artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: hello-world-v${{ steps.gitversion.outputs.SemVer }}
+        path: ./*.zip
+
+    - name: Publish release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./*.zip
+        tag_name: ${{ steps.gitversion.outputs.SemVer }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # release:
   #   runs-on: ubuntu-latest
@@ -88,10 +96,10 @@ jobs:
   #     with:
   #       name: hello-world-${{ env.helloWorldVersion }}
 
-    - name: Publish release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: ./*.zip
-        tag_name: ${{ steps.gitversion.outputs.SemVer }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Publish release
+    #   uses: softprops/action-gh-release@v1
+    #   with:
+    #     files: ./*.zip
+    #     tag_name: ${{ env.helloWorldVersion }}
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
