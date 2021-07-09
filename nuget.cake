@@ -1,9 +1,9 @@
 var target = Argument("target", "Default");
-var path = Argument("path", "");
+var path = Argument("publishPath", "");
 var version = Argument("libraryVersion", "");
-var title = Argument("title", "");
-var description = Argument("description", "");
-var output = Argument("output", ".");
+var title = Argument("libraryTitle", "");
+var description = Argument("libraryDescription", "");
+var output = Argument("nugetOutput", ".");
 
 Task("Create-Nuget")
   	.Does(() =>

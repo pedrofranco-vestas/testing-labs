@@ -62,11 +62,11 @@ jobs:
         target: Create-Nuget
         verbosity: Diagnostic
         arguments: |
-          path: "publish/api"
+          publishPath: "publish/api"
           libraryVersion: "${{ steps.gitversion.outputs.SemVer }}"
-          title: "Logging Service API"
-          description: "Some logging service descriptions"
-          output: "."
+          libraryTitle: "Logging Service API"
+          libraryDescription: "Some logging service descriptions"
+          nugetOutput: "."
 
     - name: Pack artifacts
       uses: papeloto/action-zip@v1
