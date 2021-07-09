@@ -1,6 +1,6 @@
 var target = Argument("target", "Default");
 var path = Argument("path", "");
-var version = Argument("version", "");
+var version = Argument("libraryVersion", "");
 var title = Argument("title", "");
 var description = Argument("description", "");
 var output = Argument("output", ".");
