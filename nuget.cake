@@ -1,4 +1,3 @@
-
 var target = Argument("target", "Default");
 var path = Argument("path", "");
 var version = Argument("version", "");

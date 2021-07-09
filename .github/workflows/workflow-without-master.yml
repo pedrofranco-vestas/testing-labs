@@ -63,10 +63,10 @@ jobs:
         verbosity: Diagnostic
         arguments: |
           path: "publish/api"
-          version: ${{ steps.gitversion.outputs.SemVer }}
+          version: "${{ steps.gitversion.outputs.SemVer }}"
           title: "Logging Service API"
           description: "Some logging service descriptions"
-          output: .
+          output: "."
 
     - name: Pack artifacts
       uses: papeloto/action-zip@v1
