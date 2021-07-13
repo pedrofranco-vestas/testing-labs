@@ -53,7 +53,7 @@ jobs:
       run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o publish/nupkg/ -p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
 
     - name: Build artifacts
-      run: dotnet publish ./HelloWorld -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/api/ -r win-x64
+      run: dotnet publish ./HelloWorld -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/api/ -r win-x64 -p:Version=${{ steps.gitversion.outputs.SemVer }}
 
     - name: Create nuget package from publish
       uses: cake-build/cake-action@v1
@@ -63,16 +63,17 @@ jobs:
         verbosity: Diagnostic
         arguments: |
           publishPath: "publish/api"
+          projectPath: "./HelloWorld/HelloWorld.csproj"
           libraryVersion: "${{ steps.gitversion.outputs.SemVer }}"
           libraryTitle: "Logging Service API"
           libraryDescription: "Some logging service descriptions"
-          nugetOutput: "."
+          nugetOutput: "publish/nupkg"
 
     - name: Pack artifacts
       uses: papeloto/action-zip@v1
       with:
         dest: hello-world-win-x64-v${{ steps.gitversion.outputs.SemVer }}.zip
-        files: publish/ ./*.nupkg
+        files: publish/
     
     - name: Store artifacts
       uses: actions/upload-artifact@v2
