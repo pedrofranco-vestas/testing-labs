@@ -1,39 +1,19 @@
 var target = Argument("target", "Default");
-var path = Argument("publishPath", "");
+var srcPath = Argument("srcPath", "");
+var nuspecPath = Argument("nuspecPath", "");
 var version = Argument("libraryVersion", "");
-var title = Argument("libraryTitle", "");
-var description = Argument("libraryDescription", "");
 var output = Argument("nugetOutput", ".");
 
 Task("Create-Nuget")
   	.Does(() =>
   	{
-		var targetPath = @"lib\net5.0";
-		NuGetPack(new NuGetPackSettings
+		NuGetPack(nuspecPath, new NuGetPackSettings
 		{
-			Id = "Vestas.Hello.World.Api",
+			ArgumentCustomization = args => args
+				.Append($"-p fileSrc={srcPath}")
 			Version = version,
-			Authors = new [] { "Vestas", "Internal Tools Team" }, 
-			Owners = new [] { "Vestas", "Internal Tools Team" }, 
-			Title = title,
-			Description = description, 
-			BasePath = path,
+			BasePath = ".",
 			OutputDirectory = output,
-			Files = new [] 
-			{
-				new NuSpecContent
-				{
-					Source = "**",
-					Target = targetPath
-				}
-			},
-			Dependencies = new []
-			{
-				new NuSpecDependency
-				{
-					TargetFramework = "net5.0"
-				}
-			},
 			Verbosity = NuGetVerbosity.Detailed,
 			Copyright = $"Copyright © Vestas {DateTime.UtcNow.Year}"
 		});

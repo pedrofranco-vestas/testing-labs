@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Vestas.Hello.World.Api</id>
+    <version>$version$</version>
+    <title>Hello World Service API</title>
+    <authors>Vestas, Internal Tools Team</authors>
+    <owners>Vestas, Internal Tools Team</owners>
+    <description>Some hello world service description</description>
+    <copyright>$copyright$</copyright>
+    <repository type="git" url="https://github.com/pedrofranco-vestas/testing-labs" />
+    <tags>hello world service vestas internal tools</tags>
+    <dependencies>
+        <group targetFramework="net5.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- <file src="publish\api\*.*" target="lib\net5.0" /> -->
+    <file src="$fileSrc$" target="lib\net5.0" />
+  </files>
+</package>

@@ -62,10 +62,9 @@ jobs:
         target: Create-Nuget
         verbosity: Diagnostic
         arguments: |
-          publishPath: "publish/api"
+          srcPath: "publish/api"
+          nuspecPath: "./HelloWorld/HelloWorld.nuspec"
           libraryVersion: "${{ steps.gitversion.outputs.SemVer }}"
-          libraryTitle: "Logging Service API"
-          libraryDescription: "Some logging service descriptions"
           nugetOutput: "publish/nupkg"
 
     - name: Pack artifacts
