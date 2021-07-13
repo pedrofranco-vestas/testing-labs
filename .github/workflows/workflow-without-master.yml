@@ -73,8 +73,8 @@ jobs:
       with:
         dest: hello-world-win-x64-v${{ steps.gitversion.outputs.SemVer }}.zip
         files: |
-          publish/api/
-          publish/nupkg/
+          publish/
+          ./*.nupkg
     
     - name: Store artifacts
       uses: actions/upload-artifact@v2

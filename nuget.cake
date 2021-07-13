@@ -27,6 +27,13 @@ Task("Create-Nuget")
 					Target = targetPath
 				}
 			},
+			Dependencies = new []
+			{
+				new NuSpecDependency
+				{
+					TargetFramework = ".NETCoreApp3.1"
+				}
+			},
 			Verbosity = NuGetVerbosity.Detailed,
 			Copyright = $"Copyright © Vestas {DateTime.UtcNow.Year}"
 		});
