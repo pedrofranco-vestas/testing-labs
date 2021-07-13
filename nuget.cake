@@ -10,7 +10,7 @@ Task("Create-Nuget")
 		NuGetPack(nuspecPath, new NuGetPackSettings
 		{
 			ArgumentCustomization = args => args
-				.Append($"-p fileSrc={srcPath}")
+				.Append($"-p fileSrc={srcPath}"),
 			Version = version,
 			BasePath = ".",
 			OutputDirectory = output,
