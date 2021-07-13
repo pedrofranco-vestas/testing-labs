@@ -15,7 +15,6 @@
     </dependencies>
   </metadata>
   <files>
-    <!-- <file src="publish\api\*.*" target="lib\net5.0" /> -->
     <file src="$fileSrc$" target="lib\net5.0" />
   </files>
 </package>

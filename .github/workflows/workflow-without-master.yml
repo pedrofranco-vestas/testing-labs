@@ -62,7 +62,7 @@ jobs:
         target: Create-Nuget
         verbosity: Diagnostic
         arguments: |
-          srcPath: "publish/api"
+          srcPath: "publish/api/*.*"
           nuspecPath: "./HelloWorld/HelloWorld.nuspec"
           libraryVersion: "${{ steps.gitversion.outputs.SemVer }}"
           nugetOutput: "publish/nupkg"
