@@ -63,7 +63,6 @@ jobs:
         verbosity: Diagnostic
         arguments: |
           publishPath: "publish/api"
-          projectPath: "./HelloWorld/HelloWorld.csproj"
           libraryVersion: "${{ steps.gitversion.outputs.SemVer }}"
           libraryTitle: "Logging Service API"
           libraryDescription: "Some logging service descriptions"
