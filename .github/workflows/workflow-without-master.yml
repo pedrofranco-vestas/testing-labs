@@ -43,10 +43,7 @@ jobs:
       run: dotnet build --no-restore -c Release -p:Version=${{ steps.gitversion.outputs.SemVer }}
     
     - name: Test
-      run: |
-        ls 
-        dotnet test HelloWorld.Api.IntegrationTests.dll --no-build -c Release --verbosity normal
-      working-directory: ./HelloWorld.Api.IntegrationTests/bin/Release/net5.0/
+      run: dotnet test --no-build -c Release --verbosity normal
 
     # - name: Tag & push commit
     #   run: |
