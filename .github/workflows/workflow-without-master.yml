@@ -43,7 +43,9 @@ jobs:
       run: dotnet build --no-restore -c Release -p:Version=${{ steps.gitversion.outputs.SemVer }}
     
     - name: Test
-      run: dotnet test --no-build -c Release --verbosity normal
+      run: |
+        ls
+        dotnet test --no-build -c Release --verbosity normal
 
     # - name: Tag & push commit
     #   run: |
