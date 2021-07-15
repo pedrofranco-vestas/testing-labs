@@ -12,4 +12,8 @@
     <PackageTags>hello, world, internal, tools</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Vestas.TurbineSwRollout.Common.RetryPolicy.Models" Version="1.50.0" />
+  </ItemGroup>
+
 </Project>
