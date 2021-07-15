@@ -13,7 +13,7 @@ permissions: read-all
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -44,8 +44,8 @@ jobs:
     
     - name: Test
       run: |
-        ls
-        dotnet test --no-build -c Release --verbosity normal
+        ls ./HelloWorld.Api.IntegrationTests/bin/Release/net5.0/
+        dotnet test ./HelloWorld.Api.IntegrationTests/HelloWorld.Api.IntegrationTests.csproj --no-build -c Release --verbosity normal
 
     # - name: Tag & push commit
     #   run: |
