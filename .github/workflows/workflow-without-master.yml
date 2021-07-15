@@ -45,7 +45,7 @@ jobs:
     - name: Test
       run: |
         ls 
-        dotnet test --no-build -c Release --verbosity normal
+        dotnet test HelloWorld.Api.IntegrationTests.dll --no-build -c Release --verbosity normal
       working-directory: ./HelloWorld.Api.IntegrationTests/bin/Release/net5.0/
 
     # - name: Tag & push commit
