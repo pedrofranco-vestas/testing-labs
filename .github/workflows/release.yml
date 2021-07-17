@@ -79,7 +79,7 @@ jobs:
       if: ${{ startsWith(github.ref, 'refs/tags/') == true }}
       with:
         files: ./*.nupkg
-        prerelease: ${{ contains('alpha', github.ref) || contains('beta', github.ref) }}
+        prerelease: ${{ contains('alpha', github.ref) == true || contains('beta', github.ref) == true }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
