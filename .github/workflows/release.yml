@@ -28,29 +28,32 @@ jobs:
       uses: gittools/actions/gitversion/setup@v0.9.9
       with:
         versionSpec: '5.x'
-
     - name: Determine version
       id: gitversion
       uses: gittools/actions/gitversion/execute@v0.9.9
       with: 
         useConfigFile: true
+    - name: Set build version (from gitversion)
+      if: ${{ startsWith(github.ref, 'refs/tags/') == false }}
+      env:
+        BUILD_VERSION: ${{ steps.gitversion.outputs.SemVer }}
 
     - name: Get tag number
-      run: echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-    
-    - name: Show tag value
-      run: |
-        echo $TAG_VERSION
-        echo ${{ env.TAG_VERSION }}
+      if: ${{ startsWith(github.ref, 'refs/tags/') == true }}
+      run: echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV    
+    - name: Set build version (from tag)
+      if: ${{ startsWith(github.ref, 'refs/tags/') == true }}
+      env:
+        BUILD_VERSION: ${{ env.TAG_VERSION }}
     
     - name: Build
-      run: dotnet build --no-restore -c Release /p:Version=${{ steps.gitversion.outputs.SemVer }}
+      run: dotnet build --no-restore -c Release /p:Version=${{ env.BUILD_VERSION }}
     
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
 
     - name: Build artifacts
-      run: dotnet publish ./HelloWorld -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/ -r win-x64 -p:Version=${{ steps.gitversion.outputs.SemVer }}
+      run: dotnet publish ./HelloWorld -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/ -r win-x64 -p:Version=${{ env.BUILD_VERSION }}
 
     - name: Create nuget package from publish
       uses: cake-build/cake-action@v1
@@ -61,7 +64,7 @@ jobs:
         arguments: |
           srcPath: "publish/*.*"
           nuspecPath: "./HelloWorld/HelloWorld.nuspec"
-          libraryVersion: "${{ steps.gitversion.outputs.SemVer }}"
+          libraryVersion: "${{ env.BUILD_VERSION }}"
           nugetOutput: "."
 
     - name: Create release on push to master
@@ -69,7 +72,7 @@ jobs:
       if: ${{ startsWith(github.ref, 'refs/tags/') == false }}
       with:
         files: ./*.nupkg
-        tag_name: ${{ steps.gitversion.outputs.SemVer }}
+        tag_name: ${{ env.BUILD_VERSION }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
