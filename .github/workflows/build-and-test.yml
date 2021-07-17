@@ -1,4 +1,4 @@
-name: workflow-without-master
+name: build-and-test
 
 on:
   push:
@@ -8,8 +8,6 @@ on:
     branches-ignore: 
       - 'main'
   workflow_dispatch:
-
-permissions: read-all
 
 jobs:
   build:
@@ -26,7 +24,7 @@ jobs:
         dotnet-version: 5.0.x
 
     - name: Restore dependencies
-      run: dotnet restore --verbosity normal
+      run: dotnet restore
 
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.9
@@ -44,11 +42,6 @@ jobs:
     
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
-
-    # - name: Tag & push commit
-    #   run: |
-    #     git tag v${{ steps.gitversion.outputs.SemVer }}
-    #     git push origin v${{ steps.gitversion.outputs.SemVer }}
 
     - name: Package Model
       run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o publish/nupkg/ -p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
@@ -79,11 +72,3 @@ jobs:
       with:
         name: hello-world-v${{ steps.gitversion.outputs.SemVer }}
         path: ./*.zip
-
-    # - name: Publish release
-    #   uses: softprops/action-gh-release@v1
-    #   with:
-    #     files: ./*.zip
-    #     tag_name: ${{ steps.gitversion.outputs.SemVer }}
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
