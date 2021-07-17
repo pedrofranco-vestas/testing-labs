@@ -21,6 +21,9 @@ jobs:
       with:
         dotnet-version: 5.0.x
     
+    - name: Show github ref
+      run: echo ${{ github.ref }}
+
     - name: Restore dependencies
       run: dotnet restore
 
@@ -76,7 +79,7 @@ jobs:
       if: ${{ startsWith(github.ref, 'refs/tags/') == true }}
       with:
         files: ./*.nupkg
-        prerelease: ${{ contains('-alpha', github.ref) || contains('-beta', github.ref) }}
+        prerelease: ${{ contains('alpha', github.ref) || contains('beta', github.ref) }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
