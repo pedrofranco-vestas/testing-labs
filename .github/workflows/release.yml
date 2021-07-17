@@ -4,14 +4,11 @@ on:
   push:
     branches:
       - 'main'
-  release:
-    types:
-      - released
-      - prereleased
-  workflow_dispatch:
+    tags:
+      - 'v*'
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,31 +28,58 @@ jobs:
       uses: gittools/actions/gitversion/setup@v0.9.9
       with:
         versionSpec: '5.x'
-
     - name: Determine version
       id: gitversion
       uses: gittools/actions/gitversion/execute@v0.9.9
       with: 
         useConfigFile: true
 
-    - name: Get tag number
-      run: echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+    - name: Set build version (from gitversion)
+      if: ${{ startsWith(github.ref, 'refs/tags/') == false }}
+      run: echo "BUILD_VERSION=${steps.gitversion.outputs.SemVer}" >> $GITHUB_ENV
+    - name: Set build version (from tag)
+      if: ${{ startsWith(github.ref, 'refs/tags/') == true }}
+      run: echo "BUILD_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
     
-    - name: Check value
+    - name: Build
+      run: dotnet build --no-restore -c Release /p:Version=${{ env.BUILD_VERSION }}
+    
+    - name: Test
+      run: dotnet test --no-build -c Release --verbosity normal
+
+    - name: Build artifacts
+      run: dotnet publish ./HelloWorld -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/ -r win-x64 -p:Version=${{ env.BUILD_VERSION }}
+
+    - name: Create nuget package from publish
+      uses: cake-build/cake-action@v1
+      with:
+        script-path: nuget.cake
+        target: Create-Nuget
+        verbosity: Diagnostic
+        arguments: |
+          srcPath: "publish/*.*"
+          nuspecPath: "./HelloWorld/HelloWorld.nuspec"
+          libraryVersion: "${{ env.BUILD_VERSION }}"
+          nugetOutput: "."
+
+    - name: Create release on push to master
+      uses: softprops/action-gh-release@v1
+      if: ${{ startsWith(github.ref, 'refs/tags/') == false }}
+      with:
+        files: ./*.nupkg
+        tag_name: v${{ env.BUILD_VERSION }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create release on push tag
+      uses: softprops/action-gh-release@v1
+      if: ${{ startsWith(github.ref, 'refs/tags/') == true }}
+      with:
+        files: ./*.nupkg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish Package
       run: |
-        echo $TAG_VERSION
-        echo ${{ env.TAG_VERSION }}
-    
-    # - name: Build
-    #   run: dotnet build --no-restore -c Release /p:Version=${{ steps.gitversion.outputs.SemVer }}
-    
-    # - name: Test
-    #   run: dotnet test --no-build -c Release --verbosity normal
-
-    # - name: Package Model
-    #   run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o . /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
-
-    # - name: Publish Package
-    #   run: |
-    #     dotnet nuget add source --username vestas-power-solutions --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/vestas-power-solutions/index.json"
-    #     dotnet nuget push "./*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+        dotnet nuget add source --username vestas-power-solutions --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/vestas-power-solutions/index.json"
+        dotnet nuget push "./*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"

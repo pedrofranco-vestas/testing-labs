@@ -43,9 +43,6 @@ jobs:
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
 
-    - name: Package Model
-      run: dotnet pack ./HelloWorld --no-build --no-restore -c Release -o publish/nupkg/ -p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
-
     - name: Build artifacts
       run: dotnet publish ./HelloWorld -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/api/ -r win-x64 -p:Version=${{ steps.gitversion.outputs.SemVer }}
 
