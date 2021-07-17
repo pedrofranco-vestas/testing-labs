@@ -33,18 +33,13 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0.9.9
       with: 
         useConfigFile: true
+
     - name: Set build version (from gitversion)
       if: ${{ startsWith(github.ref, 'refs/tags/') == false }}
-      env:
-        BUILD_VERSION: ${{ steps.gitversion.outputs.SemVer }}
-
-    - name: Get tag number
-      if: ${{ startsWith(github.ref, 'refs/tags/') == true }}
-      run: echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV    
+      run: echo "BUILD_VERSION=${steps.gitversion.outputs.SemVer}" >> $GITHUB_ENV
     - name: Set build version (from tag)
       if: ${{ startsWith(github.ref, 'refs/tags/') == true }}
-      env:
-        BUILD_VERSION: ${{ env.TAG_VERSION }}
+      run: echo "BUILD_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
     
     - name: Build
       run: dotnet build --no-restore -c Release /p:Version=${{ env.BUILD_VERSION }}
