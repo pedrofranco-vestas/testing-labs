@@ -41,14 +41,10 @@ jobs:
       run: dotnet build --no-restore -c Release -p:Version=${{ steps.gitversion.outputs.SemVer }}
     
     - name: Test
-      run: dotnet test --no-build -c Release --verbosity normal
+      run: dotnet test --no-build -c Release -r artifacts/test-results/ -l "html;logfilename=helloworld-test-${{ steps.gitversion.outputs.SemVer }}.html" --verbosity normal
 
     - name: Build artifacts
-      run: dotnet publish ./HelloWorld -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/api/ -r win-x64 -p:Version=${{ steps.gitversion.outputs.SemVer }}
-
-    - name: Copy stuff
-      run: |
-        cp publish/api/*World.* publish/
+      run: dotnet publish ./HelloWorld --no-build -c Release -r win-x64 --self-contained --nologo --output publish/api/ -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:PublishTrimmed=true
 
     - name: Create nuget package from publish
       uses: cake-build/cake-action@v1
@@ -60,13 +56,13 @@ jobs:
           srcPath: "publish/api/*.*"
           nuspecPath: "./HelloWorld/HelloWorld.nuspec"
           libraryVersion: "${{ steps.gitversion.outputs.SemVer }}"
-          nugetOutput: "publish/nupkg"
+          nugetOutput: "artifacts/"
 
     - name: Pack artifacts
       uses: papeloto/action-zip@v1
       with:
         dest: hello-world-win-x64-v${{ steps.gitversion.outputs.SemVer }}.zip
-        files: publish/
+        files: artifacts/
     
     - name: Store artifacts
       uses: actions/upload-artifact@v2
