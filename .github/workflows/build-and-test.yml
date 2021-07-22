@@ -46,6 +46,10 @@ jobs:
     - name: Build artifacts
       run: dotnet publish ./HelloWorld -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/api/ -r win-x64 -p:Version=${{ steps.gitversion.outputs.SemVer }}
 
+    - name: Copy stuff
+      run: |
+        cp publish/api/*World.* publish/
+
     - name: Create nuget package from publish
       uses: cake-build/cake-action@v1
       with:
