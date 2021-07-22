@@ -44,7 +44,7 @@ jobs:
       run: dotnet test --no-build -c Release -r artifacts/test-results/ -l "html;logfilename=helloworld-test-${{ steps.gitversion.outputs.SemVer }}.html" --verbosity normal
 
     - name: Build artifacts
-      run: dotnet publish ./HelloWorld --no-build -c Release -r win-x64 --self-contained --nologo --output publish/api/ -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:PublishTrimmed=true
+      run: dotnet publish ./HelloWorld -c Release -r win-x64 --self-contained --nologo --output publish/api/ -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:PublishTrimmed=true
 
     - name: Create nuget package from publish
       uses: cake-build/cake-action@v1
