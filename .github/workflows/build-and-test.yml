@@ -46,6 +46,12 @@ jobs:
     - name: Build artifacts
       run: dotnet publish ./HelloWorld -c Release -r win-x64 --self-contained --nologo --output publish/api/ -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:PublishTrimmed=true
 
+    - name: Build the Docker image
+      run: docker build --build-arg $PACKAGE_SOURCE_USER --build-arg $PACKAGE_SOURCE_TOKEN . --file Dockerfile --tag hello-world:${{ steps.gitversion.outputs.SemVer }}
+      env: 
+        PACKAGE_SOURCE_USER: ${{ steps.gitversion.outputs.SemVer }}
+        PACKAGE_SOURCE_TOKEN: falsepass
+
     - name: Create nuget package from publish
       uses: cake-build/cake-action@v1
       with:
