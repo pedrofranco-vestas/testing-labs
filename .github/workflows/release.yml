@@ -62,6 +62,11 @@ jobs:
           libraryVersion: "${{ env.BUILD_VERSION }}"
           nugetOutput: "."
 
+    - name: Pack artifacts
+      uses: montudor/action-zip@v1
+      with:
+        args: zip -qq -r hello-world-win-x64-v${{ env.BUILD_VERSION }}.zip publish/
+
     - name: Create release on push to master
       uses: softprops/action-gh-release@v1
       if: ${{ startsWith(github.ref, 'refs/tags/') == false }}
@@ -77,7 +82,7 @@ jobs:
       with:
         files: |
           ./*.nupkg
-          publish/
+          hello-world-win-x64-v${{ env.BUILD_VERSION }}.zip
         prerelease: ${{ contains(github.ref, 'alpha') == true || contains(github.ref, 'beta') == true }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
