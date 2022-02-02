@@ -77,7 +77,6 @@ jobs:
       with:
         files: |
           ./*.nupkg
-          publish/*.*
           publish/
         prerelease: ${{ contains(github.ref, 'alpha') == true || contains(github.ref, 'beta') == true }}
       env:
