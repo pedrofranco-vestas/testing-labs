@@ -46,8 +46,11 @@ jobs:
     - name: Build artifacts
       run: dotnet publish ./HelloWorld -c Release -r win-x64 --self-contained --nologo --output publish/api/ -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:PublishTrimmed=true
 
+    - name: Name image tag
+      run: echo "IMAGE_TAG=hello-world:${{ steps.gitversion.outputs.SemVer }}" >> $GITHUB_ENV
+
     - name: Build the Docker image
-      run: docker build --build-arg $PACKAGE_SOURCE_USER --build-arg $PACKAGE_SOURCE_TOKEN . --file Dockerfile --tag hello-world:${{ steps.gitversion.outputs.SemVer }}
+      run: docker build --build-arg $PACKAGE_SOURCE_USER --build-arg $PACKAGE_SOURCE_TOKEN . --file Dockerfile --tag ${{ env.IMAGE_TAG }}
       env: 
         PACKAGE_SOURCE_USER: ${{ steps.gitversion.outputs.SemVer }}
         PACKAGE_SOURCE_TOKEN: falsepass
