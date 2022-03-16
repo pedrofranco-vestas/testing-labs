@@ -1,0 +1,26 @@
+name: test-env-vars
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Set env variables
+      run: |
+        $env:MyVar = "some value"
+        echo ${env:MyVar}
+
+    - name: Show all variables
+      run: env
