@@ -21,9 +21,9 @@ jobs:
       run: |
         $env:MyVar = "some value"
         $env:RefName = ${env:GITHUB_REF_NAME}
-        echo "$env:MyVar='some value'" >> $GITHUB_ENV
-        echo "$env:RefName=${env:GITHUB_REF_NAME}" >> $GITHUB_ENV
-        echo "$env:RefNameSecond=${env:GITHUB_REF_NAME}" >> $GITHUB_ENV
+        echo "MyVar='some value 2'" >> $GITHUB_ENV
+        echo "RefName=${env:GITHUB_REF_NAME}" >> $GITHUB_ENV
+        echo "RefNameSecond=${env:GITHUB_REF_NAME}" >> $GITHUB_ENV
         echo "myvar is ${env:MyVar}"
         echo "RefName is ${env:RefName}"
         echo "RefNameSecond is ${env:RefNameSecond}"
