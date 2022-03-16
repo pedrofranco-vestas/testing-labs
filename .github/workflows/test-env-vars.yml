@@ -20,14 +20,14 @@ jobs:
     - name: Set env variables
       run: |
         $env:MyVar = "some value"
-        echo myvar = ${env:MyVar}
-        $env:RefName = ${GITHUB_REF_NAME}
-        echo RefName = ${env:RefName}
+        $env:RefName = ${env:GITHUB_REF_NAME}
+        echo "myvar is ${env:MyVar}"
+        echo "RefName is ${env:RefName}"
 
     - name: Show all variables
       run: env
 
     - name: Show my variables
       run: |
-        echo myvar = ${env:MyVar}
-        echo RefName = ${env:RefName}
+        echo "myvar is ${env:MyVar}"
+        echo "RefName is ${env:RefName}"
