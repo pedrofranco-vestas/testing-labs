@@ -20,7 +20,7 @@ jobs:
         echo "RefNameThird=${env:GITHUB_REF_NAME.replace('feature/', '')}" >> $env:GITHUB_ENV
         echo "RefNameFourth=$env:GITHUB_REF_NAME.replace('feature/', '')" >> $env:GITHUB_ENV
         echo "RefNameFifth=$env:GITHUB_REF_NAME#feature/" >> $env:GITHUB_ENV
-        # echo "RefNameSixth=" + $env:GITHUB_REF_NAME.replace('feature/', '') >> $env:GITHUB_ENV
+        echo ("RefNameSixth=" + $env:GITHUB_REF_NAME.replace('feature/', '')) >> $env:GITHUB_ENV
         echo "RefNameSeventh={$env:GITHUB_REF_NAME#feature/}" >> $env:GITHUB_ENV
         $RefNameEighth = ${env:GITHUB_REF_NAME}.replace('feature/', '')
         echo "RefNameEighth=$RefNameEighth" >> $env:GITHUB_ENV
@@ -36,7 +36,7 @@ jobs:
         echo "RefNameThird is ${env:RefNameThird}"
         echo "RefNameFourth is ${env:RefNameFourth}"
         echo "RefNameFifth is ${env:RefNameFifth}"
-        # echo "RefNameSixth is ${env:RefNameSixth}"
+        echo "RefNameSixth is ${env:RefNameSixth}"
         echo "RefNameSeventh is ${env:RefNameSeventh}"
         echo "RefNameEighth is ${env:RefNameEighth}"
-        ${{ env.RefNameEighth }}
+        # ${{ env.RefNameEighth }}
