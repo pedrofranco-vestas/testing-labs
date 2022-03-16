@@ -47,7 +47,7 @@ jobs:
 
     - name: Publish Packages
       run: |
-        ls -aAl
+        ls
         dotnet nuget push "artifacts/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"    
     
     # - name: Set env variables
