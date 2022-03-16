@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: windows-latest
 
     steps:
@@ -20,7 +20,14 @@ jobs:
     - name: Set env variables
       run: |
         $env:MyVar = "some value"
-        echo ${env:MyVar}
+        echo myvar = ${env:MyVar}
+        $env:RefName = ${GITHUB_REF_NAME}
+        echo RefName = ${env:RefName}
 
     - name: Show all variables
       run: env
+
+    - name: Show my variables
+      run: |
+        echo myvar = ${env:MyVar}
+        echo RefName = ${env:RefName}
