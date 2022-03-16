@@ -21,9 +21,10 @@ jobs:
       run: |
         echo "MyVar='some value 2'" >> $env:GITHUB_ENV
         echo "RefName=${env:GITHUB_REF_NAME}" >> $env:GITHUB_ENV
-        echo "RefNameSecond=${env:GITHUB_REF_NAME}" >> $env:GITHUB_ENV
-        echo "RefNameThird=${env:GITHUB_REF_NAME#feature/}" >> $env:GITHUB_ENV
-        echo "RefNameFourth=${env:GITHUB_REF_NAME.replace('feature/', '')}" >> $env:GITHUB_ENV
+        echo "RefNameSecond=${env:GITHUB_REF_NAME#feature/}" >> $env:GITHUB_ENV
+        echo "RefNameThird=${env:GITHUB_REF_NAME.replace('feature/', '')}" >> $env:GITHUB_ENV
+        echo "RefNameFourth=$env:GITHUB_REF_NAME.replace('feature/', '')" >> $env:GITHUB_ENV
+        echo "RefNameFifth=$env:GITHUB_REF_NAME#feature/" >> $env:GITHUB_ENV
 
     - name: Show all variables
       run: env
@@ -33,3 +34,6 @@ jobs:
         echo "myvar is ${env:MyVar}"
         echo "RefName is ${env:RefName}"
         echo "RefNameSecond is ${env:RefNameSecond}"
+        echo "RefNameThird is ${env:RefNameThird}"
+        echo "RefNameFourth is ${env:RefNameFourth}"
+        echo "RefNameFifth is ${env:RefNameFifth}"
