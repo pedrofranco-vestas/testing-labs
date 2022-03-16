@@ -25,8 +25,8 @@ jobs:
         echo "RefNameThird=${env:GITHUB_REF_NAME.replace('feature/', '')}" >> $env:GITHUB_ENV
         echo "RefNameFourth=$env:GITHUB_REF_NAME.replace('feature/', '')" >> $env:GITHUB_ENV
         echo "RefNameFifth=$env:GITHUB_REF_NAME#feature/" >> $env:GITHUB_ENV
-        echo ("RefNameSixth=$env:GITHUB_REF_NAME.replace('feature/', '')") >> $env:GITHUB_ENV
-        echo ("RefNameSeventh=$env:GITHUB_REF_NAME#feature/") >> $env:GITHUB_ENV
+        echo "RefNameSixth=" + $env:GITHUB_REF_NAME.replace('feature/', '') >> $env:GITHUB_ENV
+        echo "RefNameSeventh={$env:GITHUB_REF_NAME#feature/"} >> $env:GITHUB_ENV
 
     - name: Show all variables
       run: env
