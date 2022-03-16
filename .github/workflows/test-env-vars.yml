@@ -39,3 +39,4 @@ jobs:
         # echo "RefNameSixth is ${env:RefNameSixth}"
         echo "RefNameSeventh is ${env:RefNameSeventh}"
         echo "RefNameEighth is ${env:RefNameEighth}"
+        ${{ env.RefNameEighth }}
