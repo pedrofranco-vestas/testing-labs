@@ -40,7 +40,7 @@ jobs:
         target: Create-Nuget
         verbosity: Normal
         arguments: |
-          srcPath: "publish/api/*.*"
+          srcPath: "publish\api\*.*"
           nuspecPath: "./HelloWorld/HelloWorld.nuspec"
           libraryVersion: "${{ steps.gitversion.outputs.SemVer }}"
           nugetOutput: "artifacts/"
