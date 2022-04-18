@@ -29,6 +29,16 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0.9.9
       with: 
         useConfigFile: true
+    
+    - name: Setting
+      run: echo ("BUILD_VERSION=" + ${{steps.gitversion.outputs.SemVer}}) >> $env:GITHUB_ENV
+
+    - name: Getting
+      run: |
+        echo ${env.BUILD_VERSION}
+        echo ${env:BUILD_VERSION}
+        echo ${{env.BUILD_VERSION}}
+        
 
     - name: Build artifacts
       run: dotnet publish ./HelloWorld -c Release -r win-x64 --self-contained --nologo --output publish/api/ -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:PublishTrimmed=true
