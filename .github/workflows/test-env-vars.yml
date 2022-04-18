@@ -31,7 +31,7 @@ jobs:
         useConfigFile: true
     
     - name: Setting
-      run: echo ("BUILD_VERSION=" + ${{steps.gitversion.outputs.SemVer}}) >> $env:GITHUB_ENV
+      run: echo ("BUILD_VERSION=" + '${{steps.gitversion.outputs.SemVer}}') >> $env:GITHUB_ENV
 
     - name: Getting
       run: |
