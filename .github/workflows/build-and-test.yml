@@ -13,6 +13,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    outputs:
+      version: ${{ steps.gitversion.outputs.SemVer }}
+    
     steps:
     - uses: actions/checkout@v2
       with:
@@ -45,15 +48,35 @@ jobs:
 
     - name: Build artifacts
       run: dotnet publish ./HelloWorld -c Release -r win-x64 --self-contained --nologo --output publish/api/ -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:PublishTrimmed=true
+    
+    - name: Store artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: hello-world-v${{ steps.gitversion.outputs.SemVer }}
+        path: publish/api
+
+  package:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Download math result for job 1
+      uses: actions/download-artifact@v3
+      with:
+        name: hello-world-v${{ needs.build.outputs.version }}
+        path: publish/api/
 
     - name: Name image tag
-      run: echo "IMAGE_TAG=hello-world:${{ steps.gitversion.outputs.SemVer }}" >> $GITHUB_ENV
+      run: echo "IMAGE_TAG=hello-world:${{ needs.build.outputs.version }}" >> $GITHUB_ENV
 
-    - name: Build the Docker image
-      run: docker build --build-arg $PACKAGE_SOURCE_USER --build-arg $PACKAGE_SOURCE_TOKEN . --file Dockerfile --tag ${{ env.IMAGE_TAG }}
-      env: 
-        PACKAGE_SOURCE_USER: ${{ steps.gitversion.outputs.SemVer }}
-        PACKAGE_SOURCE_TOKEN: falsepass
+    # - name: Build the Docker image
+    #   run: docker build --build-arg $PACKAGE_SOURCE_USER --build-arg $PACKAGE_SOURCE_TOKEN . --file Dockerfile --tag ${{ env.IMAGE_TAG }}
+    #   env: 
+    #     PACKAGE_SOURCE_USER: ${{ needs.build.outputs.version }}
+    #     PACKAGE_SOURCE_TOKEN: falsepass
 
     - name: Create nuget package from publish
       uses: cake-build/cake-action@v1
@@ -64,17 +87,11 @@ jobs:
         arguments: |
           srcPath: "publish/api/*.*"
           nuspecPath: "./HelloWorld/HelloWorld.nuspec"
-          libraryVersion: "${{ steps.gitversion.outputs.SemVer }}"
+          libraryVersion: "${{ needs.build.outputs.version }}"
           nugetOutput: "artifacts/"
-
-    # - name: Pack artifacts
-    #   uses: papeloto/action-zip@v1
-    #   with:
-    #     dest: hello-world-win-x64-v${{ steps.gitversion.outputs.SemVer }}.zip
-    #     files: artifacts/
     
     - name: Store artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: hello-world-v${{ steps.gitversion.outputs.SemVer }}
+        name: hello-world-v${{ needs.build.outputs.version }}
         path: artifacts/
