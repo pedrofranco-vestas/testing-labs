@@ -52,7 +52,7 @@ jobs:
     - name: Store artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: hello-world-v${{ steps.gitversion.outputs.SemVer }}
+        name: hello-world-publish-v${{ steps.gitversion.outputs.SemVer }}
         path: publish/api
 
   package:
