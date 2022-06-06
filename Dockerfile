@@ -13,10 +13,10 @@ WORKDIR "/src/HelloWorld.Api"
 RUN dotnet build "HelloWorld.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-ARG PACKAGE_SOURCE_USER
-ARG PACKAGE_SOURCE_TOKEN
-RUN echo ${PACKAGE_SOURCE_USER}
-RUN echo ${PACKAGE_SOURCE_TOKEN} 
+# ARG PACKAGE_SOURCE_USER
+# ARG PACKAGE_SOURCE_TOKEN
+# RUN echo ${PACKAGE_SOURCE_USER}
+# RUN echo ${PACKAGE_SOURCE_TOKEN} 
 RUN dotnet publish "HelloWorld.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
