@@ -21,6 +21,10 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Check az-cli version
+      run: |
+        az version 
+
     - name: Login using new method
       uses: azure/login@v1
       with:
