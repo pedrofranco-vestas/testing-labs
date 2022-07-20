@@ -21,9 +21,9 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Check az-cli version
+    - name: Check ref_name
       run: |
-        az version 
+        echo ${{ github.ref_name }}
 
     # - name: Login using new method
     #   uses: azure/login@v1
