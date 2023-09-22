@@ -14,7 +14,7 @@ patches:
   - target:
       kind: Deployment
       name: hello-world-deployment
-    path: deployment-patch.yaml
+    path: deployment-patch.yml
 
 # patchesStrategicMerge:
 #   - deployment.yml
