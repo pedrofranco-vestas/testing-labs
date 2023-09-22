@@ -33,6 +33,7 @@ jobs:
       run: |
         ls -al
         cat hello-world.deployment.yaml
+        kustomize edit set --help
       working-directory: .k8s/dev
 
     - name: Restore dependencies
