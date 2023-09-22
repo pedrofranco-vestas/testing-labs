@@ -1,0 +1,9 @@
+- op: add
+  path: /spec/template/spec/containers/0
+  value:
+    env:
+      - name: CONNECTIONSTRINGS__NOSUCHDB
+        valueFrom: 
+          secretKeyRef:
+            name: some-db-secret
+            key: connection

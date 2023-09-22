@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
         - name: hello-world
+          image: hello-world:notag
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
