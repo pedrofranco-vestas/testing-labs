@@ -25,8 +25,9 @@ jobs:
 
     - name: Run kustomize
       run: |
+        ls
         kustomize edit set image hello-world=ghcr.io/pedrofranco-vestas/hello-world:1.2.3
-        kustomize build .k8s/dev -o hello-world.deployment.yaml
+        kustomize build ./.k8s/dev -o hello-world.deployment.yaml
         
     - name: View manifest
       run: |
