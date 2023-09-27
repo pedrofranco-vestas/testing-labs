@@ -13,7 +13,6 @@ jobs:
   deploy-inherit:
     uses: ./.github/workflows/deploy.yaml
     if: github.event_name == 'workflow_dispatch'
-    environment: development
     with:
       environment: development
     secrets: inherit
@@ -21,7 +20,6 @@ jobs:
   deploy-specific:
     uses: ./.github/workflows/deploy.yaml
     if: github.event_name == 'workflow_dispatch'
-    environment: development
     with:
       environment: development
     secrets:
