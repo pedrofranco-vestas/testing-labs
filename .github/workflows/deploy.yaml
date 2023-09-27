@@ -1,0 +1,29 @@
+name: deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      TESTING_SECRET_2:
+        required: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Check secret
+        run: |
+          echo ${{ secrets.TESTING_SECRET }}
+
+  to-vks:
+    runs-on: self-hosted
+    needs: [deploy]
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Check secret
+        run: |
+          echo ${{ secrets.TESTING_SECRET }}

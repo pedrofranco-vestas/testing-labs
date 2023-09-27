@@ -10,6 +10,23 @@ on:
   workflow_dispatch:
 
 jobs:
+  deploy-inherit:
+    uses: ./.github/workflows/deploy.yaml
+    if: github.event_name == 'workflow_dispatch'
+    environment: development
+    with:
+      environment: development
+    secrets: inherit
+
+  deploy-specific:
+    uses: ./.github/workflows/deploy.yaml
+    if: github.event_name == 'workflow_dispatch'
+    environment: development
+    with:
+      environment: development
+    secrets:
+      TESTING_SECRET_2: ${{ secrets.TESTING_SECRET }}
+
   build:
     runs-on: ubuntu-latest
 
@@ -26,15 +43,14 @@ jobs:
     - name: Run kustomize
       run: |
         kustomize edit set image hello-world=ghcr.io/pedrofranco-vestas/hello-world:1.2.3
-        kustomize build . -o hello-world.deployment.yaml
+        kustomize build . -o ./../../hello-world.deployment.yaml
       working-directory: .k8s/dev
         
     - name: View manifest
       run: |
         ls -al
         cat hello-world.deployment.yaml
-        kustomize edit set --help
-      working-directory: .k8s/dev
+      # working-directory: .k8s/dev
 
     - name: Restore dependencies
       run: dotnet restore
