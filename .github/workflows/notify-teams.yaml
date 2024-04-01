@@ -1,7 +1,7 @@
 name: notify-teams
 
 on:
-  deployment:
+  deployment_status:
 
 jobs:
   build:
@@ -9,7 +9,13 @@ jobs:
 
     steps:
     - name: Notify people
+      if: ${{github.event.deployment_status.state == 'success'}}
       run: |
         curl -H 'Accept: */*' -H 'Content-Type: application/json' \
-            --data-raw '{"@context":"http://schema.org/extensions","@type":"MessageCard","summary":"New deployment","text":"Hello, new **deployment** at [testing-labs](https://github.com/pedrofranco-vestas/testing-labs) testing 1 2 3"}' \
+            --data-raw '{\
+            "@context":"http://schema.org/extensions",\
+            "@type":"MessageCard",\
+            "summary":"New deployment",\
+            "title":"Deployment at ${{github.repository}}",\
+            "text":"${{github.triggering_actor}} has carried out a new **deployment** at [this repository](${{github.event.deployment_status.deployment_url}})"}' \
             ${{ secrets.URI_HOOK }}
