@@ -14,11 +14,10 @@ jobs:
         curl -H 'Accept: */*' -H 'Content-Type: application/json' --data-raw '{"@context":"http://schema.org/extensions", "@type":"MessageCard", "summary":"New deployment", "title":"Deployment at ${{github.server_url}}/${{github.repository}} (${{github.event.deployment_status.environment}})", "text":"${{github.triggering_actor}} has carried out a new [deployment](${{github.event.deployment_status.deployment_url}}) on [this repository](${{github.server_url}}/${{github.repository}})"}' ${{ secrets.URI_HOOK }}
   
   remove:
-    needs: notify
+    if: ${{github.event.deployment_status.state != 'success'}}
     runs-on: ubuntu-latest
 
     steps:
     - name: Remove workflow run
-      if: ${{github.event.deployment_status.state != 'success'}}
       run: |
         curl -L -X DELETE -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{github.token}}" https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}
