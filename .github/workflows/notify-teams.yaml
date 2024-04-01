@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: Notify people
-      run: |
+      run: >
         curl -H 'Accept: */*' -H 'Content-Type: application/json' --data-raw \
           '{\
             "@context":"http://schema.org/extensions", \
