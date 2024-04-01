@@ -1,0 +1,15 @@
+name: notify-teams
+
+on:
+  deployment:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Notify people
+      run: |
+        curl -H 'Accept: */*' -H 'Content-Type: application/json' \
+            --data-raw '{"@context":"http://schema.org/extensions","@type":"MessageCard","summary":"New deployment","text":"Hello, new **deployment** at [testing-labs](https://github.com/pedrofranco-vestas/testing-labs) testing 1 2 3"}' \
+            ${{ secrets.URI_HOOK }}
