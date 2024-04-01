@@ -4,18 +4,18 @@ on:
   deployment_status:
 
 jobs:
-  build:
+  notify:
+    if: ${{github.event.deployment_status.state == 'success'}}
     runs-on: ubuntu-latest
 
     steps:
     - name: Notify people
-      if: ${{github.event.deployment_status.state == 'success'}}
       run: |
         curl -H 'Accept: */*' -H 'Content-Type: application/json' \
             --data-raw '{\
             "@context":"http://schema.org/extensions",\
             "@type":"MessageCard",\
             "summary":"New deployment",\
-            "title":"Deployment at ${{github.repository}}",\
+            "title":"Deployment at ${{github.server_url}}/${{github.repository}} (${{github.event.deployment_status.environment}})",\
             "text":"${{github.triggering_actor}} has carried out a new **deployment** at [this repository](${{github.event.deployment_status.deployment_url}})"}' \
             ${{ secrets.URI_HOOK }}
